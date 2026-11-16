@@ -5,3 +5,4 @@ pandas>=2.2
 matplotlib>=3.8
 python-dotenv>=1.0
 ipykernel>=6.29
+pytest>=8.0

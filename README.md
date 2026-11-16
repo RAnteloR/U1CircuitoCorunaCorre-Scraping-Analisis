@@ -17,7 +17,9 @@ datos/
   clean/      participacions.csv y carreiras.csv pseudonimizadas (no se suben)
   externos/   ficheros hechos por nosotros o de otras fuentes
 notebooks/    notebooks numerados del pipeline
-src/          código común (descarga.py), importado desde los notebooks
+src/          código común (config.py, obtencion.py), importado desde los notebooks
+tests/        tests de las funciones comunes (sin peticiones reales)
+docs/         contrato de datos, informe de calidad y otra documentación
 output/       entregas para cada destinatario
 presentacion/ presentación en PDF
 ```
@@ -30,16 +32,20 @@ presentacion/ presentación en PDF
    .venv\Scripts\Activate.ps1
    pip install -r requirements.txt
    ```
-2. Copiar `.env.example` como `.env` y poner la clave `CHAVE_HMAC` común del grupo
+2. Copiar `.env.example` como `.env` y poner la clave `CHAVE` común del grupo
    (compartida por un canal privado, nunca en el repositorio).
-3. Ejecutar los notebooks de `notebooks/` en orden, con el kernel del `.venv`.
+3. Comprobar que todo funciona: `python -m pytest`
+4. Ejecutar los notebooks de `notebooks/` en orden, con el kernel del `.venv`.
 
-### Descarga común (`src/descarga.py`)
+Las rutas de datos y la lectura de la clave están en `src/config.py`
+(`from src.config import DIR_RAW, DIR_INTERIM, DIR_CLEAN, leer_clave`).
+
+### Descarga común (`src/obtencion.py`)
 
 La función está en un módulo `.py` y no dentro de un notebook para que **todos los notebooks
 importen la misma**, sin copiarla. `notebooks/01_descarga.ipynb` explica cómo funciona y la prueba.
 
-Todas las peticiones pasan por `descargar(url)`:
+Todas las peticiones pasan por `descargar(url, destino=None)`:
 
 - **User-Agent propio** que identifica el proyecto y un contacto.
 - **Pausa** de 1,5 s entre peticiones reales (el mínimo pedido es 1 s).
@@ -49,7 +55,7 @@ Todas las peticiones pasan por `descargar(url)`:
 - Escribe primero un `.part` y luego lo renombra, para que una descarga cortada no quede como buena.
 
 ```python
-from src.descarga import descargar
+from src.obtencion import descargar
 html = descargar("https://corunacorre.com/gl/web/resultado/evento-3210")  # bytes
 ```
 

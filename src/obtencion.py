@@ -8,7 +8,7 @@ Todas las peticiones a la web pasan por `descargar()`, que aplica las buenas pr�
 - Si el fichero ya existe, no se vuelve a descargar: se lee del disco.
 
 Ejemplo:
-    from src.descarga import descargar, ruta_raw
+    from src.obtencion import descargar, ruta_raw
     html = descargar("https://corunacorre.com/gl/web/resultado/evento-3210")
     # -> bytes; guardado en datos/raw/corunacorre.com/gl_web_resultado_evento-3210.html
 """
@@ -22,17 +22,15 @@ from urllib.parse import urlsplit
 
 import requests
 
+from src.config import DIR_RAW
+
 USER_AGENT = (
-    "CorunaCorreBot/0.1 (proyecto educativo Big Data; "
+    "CorunaCorreBot/0.1 (grupo P2 Coruna Corre, asignatura Sistemas de Big Data; "
     "contacto: raul.antelobdi@gmail.com)"
 )
 PAUSA = 1.5  # segundos entre peticiones (el enunciado pide al menos 1 s)
 TIMEOUT = 30  # segundos máximos esperando respuesta
 REINTENTOS = 3  # intentos si el servidor falla (5xx, 429) o se cae la conexión
-
-# Raíz del repositorio: este fichero está en <repo>/src/descarga.py
-RAIZ = Path(__file__).resolve().parents[1]
-DIR_RAW = RAIZ / "datos" / "raw"
 
 _sesion = requests.Session()
 _sesion.headers.update({"User-Agent": USER_AGENT})
@@ -64,16 +62,16 @@ def _esperar() -> None:
     _ultima_peticion = time.monotonic()
 
 
-def descargar(url: str, ruta: str | Path | None = None, forzar: bool = False) -> bytes:
+def descargar(url: str, destino: str | Path | None = None, forzar: bool = False) -> bytes:
     """Descarga `url` y devuelve el contenido en bytes.
 
-    - ruta: dónde guardarla. Si no se indica, se usa ruta_raw(url).
+    - destino: dónde guardarla. Si no se indica, se usa ruta_raw(url).
     - forzar: si es True, descarga aunque el fichero ya exista.
 
     Si el fichero ya existe (y no se fuerza), se lee del disco sin hacer ninguna
     petición. Lanza requests.HTTPError si la respuesta final no es 2xx.
     """
-    ruta = Path(ruta) if ruta is not None else ruta_raw(url)
+    ruta = Path(destino) if destino is not None else ruta_raw(url)
 
     if ruta.exists() and not forzar:
         return ruta.read_bytes()
