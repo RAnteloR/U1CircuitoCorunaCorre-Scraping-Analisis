@@ -1,0 +1,25 @@
+# Datos con nombres de personas: NO se suben (RGPD)
+datos/raw/*
+datos/interim/*
+datos/clean/*
+!datos/raw/.gitkeep
+!datos/interim/.gitkeep
+!datos/clean/.gitkeep
+
+# Clave HMAC
+.env
+
+# Entorno de Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Descargas a medias
+*.part
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
