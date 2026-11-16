@@ -9,8 +9,8 @@ Todas las peticiones a la web pasan por `descargar()`, que aplica las buenas prÃ
 
 Ejemplo:
     from src.descarga import descargar, ruta_raw
-    html = descargar("https://corunacorre.com/gl/web/resultado/evento-3216")
-    # -> bytes; guardado en datos/raw/corunacorre.com/gl_web_resultado_evento-3216.html
+    html = descargar("https://corunacorre.com/gl/web/resultado/evento-3210")
+    # -> bytes; guardado en datos/raw/corunacorre.com/gl_web_resultado_evento-3210.html
 """
 
 from __future__ import annotations

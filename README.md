@@ -50,7 +50,7 @@ Todas las peticiones pasan por `descargar(url)`:
 
 ```python
 from src.descarga import descargar
-html = descargar("https://corunacorre.com/gl/web/resultado/evento-3216")  # bytes
+html = descargar("https://corunacorre.com/gl/web/resultado/evento-3210")  # bytes
 ```
 
 ## Legalidad y protección de datos
