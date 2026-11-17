@@ -1,0 +1,7 @@
+carrera_id,orden,fecha,paginas,ultima_pagina_web,filas_por_pagina,filas_ultima_pagina,filas,filas_min_esperadas,filas_max_esperadas,paginas_incompletas,filas_duplicadas,cuadra
+carrera_01,1,2026-03-14,60,60,25,14,1489,1476,1500,0,0,True
+carrera_02,2,2026-04-12,38,38,25,4,929,926,950,0,0,True
+carrera_03,3,2026-05-10,32,32,25,20,795,776,800,0,0,True
+carrera_04,4,2026-05-31,35,35,25,25,875,851,875,0,0,True
+carrera_05,5,2026-09-13,27,27,25,9,659,651,675,0,0,True
+carrera_06,6,2026-10-25,26,26,25,18,643,626,650,0,0,True
