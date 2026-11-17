@@ -25,6 +25,11 @@ def tiempo_a_segundos(texto):
     if texto == "":
         return None
 
+    # Un tiempo negativo no es un tiempo que falta: lo convertimos y marcar_tiempo lo dará como imposible
+    negativo = texto.startswith("-")
+    if negativo:
+        texto = texto[1:].strip()
+
     partes = texto.split(":")
     if len(partes) not in (2, 3) or not all(p.isdigit() for p in partes):
         return None
@@ -35,7 +40,8 @@ def tiempo_a_segundos(texto):
     h, m, s = numeros
     if m >= 60 or s >= 60:
         return None
-    return h * 3600 + m * 60 + s
+    total = h * 3600 + m * 60 + s
+    return -total if negativo else total
 
 
 def marcar_tiempo(segundos):

@@ -74,3 +74,14 @@ def test_posto_categoria_raro():
 def test_categorias_especiales():
     assert parsear_posto_categoria("ESPM-1") == ("ESP", "M", 1)     # Especial
     assert parsear_posto_categoria("NO") == (None, None, None)      # sin categoría
+
+def test_tiempo_negativo_es_imposible():
+    assert tiempo_a_segundos("-5:00") == -300
+    assert marcar_tiempo(tiempo_a_segundos("-5:00")) == "imposible"
+
+
+def test_bordes_de_los_limites():
+    assert marcar_tiempo(12 * 60) == "ok"              # justo 12:00 vale
+    assert marcar_tiempo(12 * 60 - 1) == "imposible"
+    assert marcar_tiempo(60 * 60) == "ok"              # justo 1:00:00 vale
+    assert marcar_tiempo(60 * 60 + 1) == "imposible"

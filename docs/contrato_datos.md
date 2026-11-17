@@ -1,6 +1,6 @@
 # Contrato de datos (tabla limpia)
 
-Tabla que sale de la limpieza (issue #4 / #9), una por carrera, en `datos/clean/`.
+Tabla que sale de la limpieza (issue #4 / #9), una por carrera, en `datos/interim/carrera_XX_limpia.csv`.
 La usan C(Ismael) para ligar personas y D(Carlos) para cruzar con inscritos.
 No se sube al repo porque lleva nombres.
 
