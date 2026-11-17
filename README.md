@@ -59,6 +59,19 @@ from src.obtencion import descargar
 html = descargar("https://corunacorre.com/gl/web/resultado/evento-3210")  # bytes
 ```
 
+### Carreras reales (`src/carreras.py`, HITO 1)
+
+`notebooks/02_carreras.ipynb` ejecuta los tres pasos y solo muestra recuentos:
+
+1. `descubrir_carreras()`: parte de `/web/resultado/` y sigue **Edición Actual → Por evento →
+   carrera → categorías**. La Absoluta se busca por el texto del enlace y se excluye la
+   carrera que aún no se ha corrido (fecha ≥ hoy). Devuelve `carrera_id, orden, fecha, url_absoluta`.
+2. `descargar_todas()`: pide `?page=1, 2, ...` hasta que no hay filas o enlace «Seguinte» y
+   guarda cada página en `datos/raw/<carrera_id>/pagina_N.html` (una segunda ejecución no hace peticiones).
+3. `construir_todas()`: crea `datos/interim/carrera_XX.csv` (columnas crudas `posto, dorsal,
+   nome, apelidos, posto_sexo, posto_categoria, tempo`) y guarda la comprobación de filas en
+   `docs/comprobacion_filas.csv`.
+
 ## Legalidad y protección de datos
 
 _Pendiente._
