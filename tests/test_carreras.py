@@ -75,6 +75,12 @@ def test_fecha_de_la_ficha():
     assert c.parsear_fecha_evento(fixture("ficha_futura.html")) == date(2026, 11, 22)
 
 
+def test_fecha_ignora_otras_fechas_fuera_del_bloque_horarios():
+    html = b"""<p>Inscripciones hasta el 15 de noviembre de 2026</p>
+    <div id="horarios"><h3>Lugar e Horarios</h3><strong>22 de novembro de 2026 as 10:00</strong></div>"""
+    assert c.parsear_fecha_evento(html) == date(2026, 11, 22)
+
+
 def test_fecha_formato_numerico():
     assert c.parsear_fecha_evento(b"<div>14/3/2026 | 5 p.m.</div>") == date(2026, 3, 14)
 
