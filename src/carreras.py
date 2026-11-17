@@ -161,13 +161,16 @@ def parsear_url_absoluta(html: bytes, url: str) -> str | None:
 def parsear_fecha_evento(html: bytes) -> date | None:
     """Fecha de la carrera desde su ficha (/gl/web/evento/<id>/).
 
-    Primero busca «14 de marzo de 2026» (bloque «Lugar e Horarios») y, si no está, la
-    primera fecha d/m/aaaa de la página.
+    Solo lee el bloque «Lugar e Horarios» (<div id="horarios">), para no coger otras fechas
+    de la ficha (p. ej. «inscripciones hasta el 15 de noviembre»). Dentro del bloque busca
+    «14 de marzo de 2026» y, si no está, la primera fecha d/m/aaaa. Si la página no tiene
+    ese bloque (HTML sin estructura de ficha), se usa la página entera.
     """
     sopa = _sopa(html)
     for etiqueta in sopa(["script", "style"]):
         etiqueta.decompose()
-    texto = sopa.get_text(" ", strip=True)
+    bloque = sopa.find(id="horarios")
+    texto = (bloque or sopa).get_text(" ", strip=True)
 
     m = re.search(r"\b(\d{1,2}) de ([A-Za-zÀ-ÿ]+) de (\d{4})\b", texto)
     if m and m.group(2).lower() in MESES:
