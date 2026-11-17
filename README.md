@@ -74,7 +74,33 @@ html = descargar("https://corunacorre.com/gl/web/resultado/evento-3210")  # byte
 
 ## Legalidad y protección de datos
 
-_Pendiente._
+### 1. Revisión de robots.txt y condiciones técnicas de las fuentes
+Antes de realizar las descargas se ha comprobado el fichero robots.txt y los avisos legales de la web principal y de las fuentes opcionales (01 Meteorología, 02 San Silvestre y 04 Clasificación del circuito):
+
+| Fuente | URL consultada | Resultado de /robots.txt | Condiciones aplicables |
+|---|---|---|---|
+| Coruña Corre (carreras, inscritos y clasificación 04) | https://corunacorre.com/robots.txt | Redirige (302) a /gl/robots.txt y devuelve 404 Not Found (no existe). | Aviso legal municipal / ChampionChip Norte, RGPD y LOPDGDD. |
+| San Silvestre Coruña (Opcional 02) | https://sansilvestrecoruna.com/robots.txt | Redirige (302) a /gl/robots.txt y devuelve 404 Not Found (no existe). | Aviso legal del organizador, RGPD y derechos sobre bases de datos. |
+| MeteoGalicia (Opcional 01 - ref.) | https://www.meteogalicia.gal/robots.txt | Devuelve 404 Not Found (no existe). | Aviso legal de la Xunta de Galicia (reutilización de información pública citando la fuente). |
+| Open-Meteo (Opcional 01 - API) | https://open-meteo.com/robots.txt | Devuelve 200 OK con User-agent: * y Allow: /. | Licencia abierta CC BY 4.0 para uso no comercial/académico. |
+
+¿Qué significa que no exista robots.txt (404 Not Found)?
+La ausencia de robots.txt indica que el administrador no ha definido restricciones técnicas de rastreo por rutas, pero no exime de cumplir el resto del marco legal:
+1. Aviso legal y uso responsable del servidor: Queda prohibido realizar peticiones masivas que degraden el servicio. Nuestro módulo src/obtencion.py aplica una pausa mínima de 1,5 segundos entre peticiones, utiliza un User-Agent identificativo del proyecto académico y guarda las respuestas en caché local (datos/raw/) para no repetir peticiones.
+2. Propiedad intelectual (derecho sui generis sobre bases de datos): La extracción se realiza exclusivamente con fines docentes y de investigación estadística dentro de la asignatura, citando las fuentes y fechas de acceso.
+3. Normativa de protección de datos (RGPD y LOPDGDD): Los datos publicados en las clasificaciones mantienen su carácter de datos personales y no pueden ser republicados ni expuestos fuera de su finalidad original.
+
+### 2. Aviso legal del circuito y tratamiento de datos personales
+Según el reglamento del circuito Coruña Corre y su cláusula de protección de datos, los participantes consienten la publicación de su nombre, apellidos, dorsal, sexo, categoría, club y tiempos con la finalidad de gestionar la competición y garantizar la transparencia de las clasificaciones deportivas.
+
+En este proyecto tratamos dichos datos aplicando el principio de minimización y protección desde el diseño:
+- Qué datos personales aparecen en origen: nome, apelidos y dorsal (junto con sexo, categoria y tempo).
+- Para qué se usan: Únicamente en local dentro de las fases internas (interim/) para poder enlazar las participaciones de una misma persona entre distintas carreras y cruzarlas con la lista de inscritos.
+- Medidas técnicas aplicadas:
+  1. No publicación en el repositorio: .gitignore bloquea datos/raw/, datos/interim/, datos/clean/ y el fichero .env.
+  2. Ocultación en notebooks (src/proteccion.py): La función quitar_identificadores(df) elimina nome, apelidos y dorsal antes de imprimir cualquier tabla en pantalla.
+  3. Pseudonimización con HMAC (src/ligazon.py): Los identificadores directos se sustituyen por un hash HMAC generado con una clave secreta compartida por canal privado (CHAVE en .env), impidiendo revertir el identificador sin la clave.
+  4. Generalización, agregación y k-anonimato en entregas (output/): Para prensa solo se entregan datos agregados; para investigación se eliminan identificadores directos y se verifica el k-anonimato sobre los cuasi-identificadores (sexo, categoria, carreras disputadas); la entrega nominal para la organización no se sube al repositorio.
 
 ## Informe de calidad y decisiones de limpieza
 
