@@ -8,7 +8,7 @@ No se sube al repo porque lleva nombres.
 
 | Columna | Tipo | Qué es |
 |---|---|---|
-| carrera_id | texto | id de la carrera (el de la web, ej. evento-3212) |
+| carrera_id | texto | id de la carrera: carrera_01 … carrera_06 (igual que los CSV de interim/) |
 | orden | entero | orden en el circuito (1-6) |
 | dorsal | texto | dorsal |
 | nome | texto | nombre (solo para ligar, luego se quita) |
@@ -16,7 +16,7 @@ No se sube al repo porque lleva nombres.
 | posto | entero | puesto en la absoluta |
 | sexo | texto | M o F |
 | posto_sexo | entero | puesto dentro del sexo (M-3 → 3) |
-| categoria | texto | SUB20, SUB23, SNR, MS1, MS2, MS3, MS4 o ESPECIAL |
+| categoria | texto | SUB20, SUB23, SNR, MS1, MS2, MS3, MS4, ESP o SIN_CATEGORIA |
 | posto_categoria | entero | puesto en la categoría (MS2M-1 → 1) |
 | tempo_s | entero | tiempo en segundos (00:28:36 → 1716) |
 | tempo_marca | texto | ok / faltante / imposible |
@@ -24,7 +24,8 @@ No se sube al repo porque lleva nombres.
 ## Decisiones
 
 - El sexo lo saco de "Puesto Sexo" y miro que coincida con la letra final de la categoría (MS2**M**). Si no coincide lo apunto en el informe de calidad.
-- Las categorías van con el código que usan las carreras (ver `datos/externos/categorias.csv`). Si sale alguna que no está en la tabla, la paso a ESPECIAL y lo explico.
+- Las categorías van con el código que usan las carreras (ver `datos/externos/categorias.csv`).
+- En los datos reales salen dos valores especiales: `ESP` (ESPM/ESPF, 3 filas) y `NO` (17 filas, sin categoría). `ESP` se queda como categoría; `NO` pasa a `SIN_CATEGORIA` con posto_categoria vacío. Si sale alguna otra que no esté en la tabla, lo explico en el informe de calidad.
 - Los tiempos no se borran, se marcan:
   - faltante = no hay tiempo
   - imposible = 0, negativo, menos de 12 min o más de 1 h (cierre de control)
@@ -32,5 +33,4 @@ No se sube al repo porque lleva nombres.
 - La categoría de una persona no debería cambiar entre carreras (art. 3 del regulamento: se fija con la edad del 14/03). Si cambia, es un problema de calidad.
 
 ## Falta por cerrar
-- Cómo será el carrera_id - hablarlo con A (Raul).
 - Si a C o a D les falta alguna columna.
