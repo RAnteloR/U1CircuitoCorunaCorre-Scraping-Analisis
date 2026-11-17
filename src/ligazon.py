@@ -44,12 +44,12 @@ def clave_persona(
     return f"N:{normalizar_nombre(nombre)}"
 
 
-def codigo_hmac(clave: str, chave: bytes | None = None) -> str:
+def codigo_hmac(clave: str, llave: bytes | None = None) -> str:
     """Devuelve el código pseudónimo (12 primeros caracteres del HMAC-SHA256) de `clave`.
 
-    `chave` es la clave secreta; si no se indica, se lee de .env con leer_clave().
+    `llave` es la clave secreta; si no se indica, se lee de .env con leer_clave().
     Nunca está escrita en el código ni en el repositorio.
     """
-    if chave is None:
-        chave = leer_clave()
-    return hmac.new(chave, clave.encode("utf-8"), hashlib.sha256).hexdigest()[:12]
+    if llave is None:
+        llave = leer_clave()
+    return hmac.new(llave, clave.encode("utf-8"), hashlib.sha256).hexdigest()[:12]
