@@ -1,13 +1,24 @@
-"""Funciones de limpieza de los resultados (B, issue #4)."""
+"""Funciones de limpieza de los resultados (B, issue #4).
+
+Separan las columnas que en la web mezclan varios datos ('M-3', 'MS2M-1')
+y pasan los tiempos a segundos. Si un valor no tiene el formato esperado,
+devuelven None para poder contarlo luego en el informe de calidad.
+"""
 
 import math
+import re
 
 TIEMPO_MIN_S = 12 * 60   # 12 min: por debajo del récord del mundo en 5 km
 TIEMPO_MAX_S = 60 * 60   # 1 h: cierre de control de la carrera
 
+PATRON_SEXO = re.compile(r"^([MF])-(\d+)$")                    # M-3
+# El '?' hace que la categoría coja lo minimo, para no comerse la letra del sexo
+PATRON_CATEGORIA = re.compile(r"^([A-Z0-9]+?)([MF])-(\d+)$")   # MS2M-1
+
 
 def tiempo_a_segundos(texto):
     """Convierte '00:28:36' o '28:36' a segundos. Si no hay tiempo o no se entiende, devuelve None."""
+    # Los vacíos de pandas llegan como NaN
     if texto is None or (isinstance(texto, float) and math.isnan(texto)):
         return None
     texto = str(texto).strip()
@@ -19,7 +30,7 @@ def tiempo_a_segundos(texto):
         return None
 
     numeros = [int(p) for p in partes]
-    if len(numeros) == 2:          # mm:ss - le añadimos 0 horas
+    if len(numeros) == 2:          # mm:ss - añadimos 0 horas
         numeros = [0] + numeros
     h, m, s = numeros
     if m >= 60 or s >= 60:
@@ -28,9 +39,29 @@ def tiempo_a_segundos(texto):
 
 
 def marcar_tiempo(segundos):
-    """Devuelve 'ok', 'faltante' o 'imposible'. No borra nada: solo marca."""
+    """Devuelve 'ok', 'faltante' o 'imposible'. No borra nada, solo marca."""
     if segundos is None:
         return "faltante"
     if segundos < TIEMPO_MIN_S or segundos > TIEMPO_MAX_S:
         return "imposible"
     return "ok"
+
+
+def parsear_posto_sexo(texto):
+    """'M-3' -> ('M', 3). Si no encaja con el formato, devuelve (None, None)."""
+    if not isinstance(texto, str):
+        return (None, None)
+    m = PATRON_SEXO.match(texto.strip().upper())
+    if not m:
+        return (None, None)
+    return (m.group(1), int(m.group(2)))
+
+
+def parsear_posto_categoria(texto):
+    """'MS2M-1' -> ('MS2', 'M', 1). Si no encaja con el formato, devuelve (None, None, None)."""
+    if not isinstance(texto, str):
+        return (None, None, None)
+    m = PATRON_CATEGORIA.match(texto.strip().upper())
+    if not m:
+        return (None, None, None)
+    return (m.group(1), m.group(2), int(m.group(3)))
