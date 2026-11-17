@@ -1,0 +1,7 @@
+carrera_id,carrera,fecha,distancia_m,salida,cierre_control,fuente
+carrera_01,Torre de Hércules,2026-03-14,6625,20:00,21:00,regulamento específico (art. 3 y 6)
+carrera_02,Matogrande-Xuxán,2026-04-12,6700,10:00,11:00,regulamento específico (art. 3 y 6)
+carrera_03,San Pedro de Visma,2026-05-10,6395,10:00,11:00,regulamento específico (art. 3 y 6)
+carrera_04,Os Rosales,2026-05-31,5935,10:00,11:00,regulamento específico (art. 3 y 6)
+carrera_05,Volta a Oza,2026-09-13,,,,sin regulamento específico publicado
+carrera_06,Ventorrillo,2026-10-25,5850,10:00,11:00,regulamento específico (art. 3 y 6)
