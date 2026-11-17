@@ -28,7 +28,7 @@ No se sube al repo porque lleva nombres.
 - En los datos reales salen dos valores especiales: `ESP` (ESPM/ESPF, 3 filas) y `NO` (17 filas, sin categoría). `ESP` se queda como categoría; `NO` pasa a `SIN_CATEGORIA` con posto_categoria vacío. Si sale alguna otra que no esté en la tabla, lo explico en el informe de calidad.
 - Los tiempos no se borran, se marcan:
   - faltante = no hay tiempo
-  - imposible = 0, negativo, menos de 12 min o más de 1 h (cierre de control)
+  - imposible = negativo, por debajo de 2:30 min/km según la distancia de la carrera (12 min si no se sabe la distancia) o más de 1 h (cierre de control). Distancias en `datos/externos/distancias.csv`.
   - ok = el resto
 - La categoría de una persona no debería cambiar entre carreras (art. 3 del regulamento: se fija con la edad del 14/03). Si cambia, es un problema de calidad.
 

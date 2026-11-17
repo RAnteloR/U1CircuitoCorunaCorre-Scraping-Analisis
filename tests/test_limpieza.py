@@ -85,3 +85,13 @@ def test_bordes_de_los_limites():
     assert marcar_tiempo(12 * 60 - 1) == "imposible"
     assert marcar_tiempo(60 * 60) == "ok"              # justo 1:00:00 vale
     assert marcar_tiempo(60 * 60 + 1) == "imposible"
+
+def test_minimo_segun_distancia():
+    # Torre de Hércules: 6.625 m -> mínimo 6,625 x 150 = 993,75 s (unos 16:34)
+    assert marcar_tiempo(15 * 60, distancia_m=6625) == "imposible"
+    assert marcar_tiempo(20 * 60, distancia_m=6625) == "ok"
+
+
+def test_sin_distancia_usa_12_min():
+    assert marcar_tiempo(13 * 60) == "ok"
+    assert marcar_tiempo(13 * 60, distancia_m=float("nan")) == "ok"   # Volta a Oza: sin distancia
