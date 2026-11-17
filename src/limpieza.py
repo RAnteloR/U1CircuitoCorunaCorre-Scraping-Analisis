@@ -8,8 +8,9 @@ devuelven None para poder contarlo luego en el informe de calidad.
 import math
 import re
 
-TIEMPO_MIN_S = 12 * 60   # 12 min: por debajo del récord del mundo en 5 km
-TIEMPO_MAX_S = 60 * 60   # 1 h: cierre de control de la carrera
+TIEMPO_MIN_S = 12 * 60   # mínimo general si no sabemos la distancia
+RITMO_MIN_S_KM = 150     # 2:30 min/km: ritmo del récord del mundo de 5 km (12:35)
+TIEMPO_MAX_S = 60 * 60   # 1 h: cierre de control (art. 6 de los regulamentos específicos)
 
 PATRON_SEXO = re.compile(r"^([MF])-(\d+)$")                    # M-3
 # El '?' hace que la categoría coja lo minimo, para no comerse la letra del sexo
@@ -44,11 +45,19 @@ def tiempo_a_segundos(texto):
     return -total if negativo else total
 
 
-def marcar_tiempo(segundos):
-    """Devuelve 'ok', 'faltante' o 'imposible'. No borra nada, solo marca."""
+def marcar_tiempo(segundos, distancia_m=None):
+    """Devuelve 'ok', 'faltante' o 'imposible'. No borra nada, solo marca.
+
+    Si se pasa la distancia de la carrera, el mínimo es 2:30 min/km por la distancia.
+    Si no se sabe (None o NaN), se usa el mínimo general de 12 min.
+    """
     if segundos is None:
         return "faltante"
-    if segundos < TIEMPO_MIN_S or segundos > TIEMPO_MAX_S:
+    if distancia_m is None or (isinstance(distancia_m, float) and math.isnan(distancia_m)):
+        minimo = TIEMPO_MIN_S
+    else:
+        minimo = distancia_m / 1000 * RITMO_MIN_S_KM
+    if segundos < minimo or segundos > TIEMPO_MAX_S:
         return "imposible"
     return "ok"
 
