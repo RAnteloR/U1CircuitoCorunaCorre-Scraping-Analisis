@@ -12,19 +12,30 @@ import unicodedata
 from src.config import leer_clave
 
 
-def normalizar_nombre(nombre: str) -> str:
-    """Devuelve el nombre en mayúsculas, sin tildes, sin espacios dobles y recortado.
+def nombre_completo(nome: str, apelidos: str) -> str:
+    """Une nombre y apellidos siempre en el mismo orden: "nome apelidos".
 
-    Ejemplo: "  María  Núñez " -> "MARIA NUNEZ"
+    La tabla limpia trae nome y apelidos en columnas separadas. Esta función es el único
+    sitio donde se unen, para que el cruce con inscritos y la ligazón de personas
+    construyan exactamente el mismo texto.
+    """
+    return f"{nome} {apelidos}"
+
+
+def normalizar_nombre(nombre: str) -> str:
+    """Devuelve el nombre en mayúsculas, sin tildes, sin guiones, sin espacios dobles y recortado.
+
+    Ejemplo: "  María-José  Núñez " -> "MARIA JOSE NUNEZ"
 
     La ñ también pierde la tilde (Ñ -> N), así que "Nuñez" y "Nunez" dan la misma clave.
+    El guion se cambia por un espacio, así "Pérez-Oca" y "Pérez Oca" dan la misma clave.
     """
     # NFD separa cada letra de su tilde; después se descartan las marcas (categoría Mn).
     sin_tildes = "".join(
         c for c in unicodedata.normalize("NFD", nombre) if unicodedata.category(c) != "Mn"
     )
     # split() sin argumentos descarta los espacios de los extremos y junta los dobles.
-    return " ".join(sin_tildes.upper().split())
+    return " ".join(sin_tildes.upper().replace("-", " ").split())
 
 
 def clave_persona(

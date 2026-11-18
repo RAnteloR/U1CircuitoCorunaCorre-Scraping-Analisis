@@ -95,8 +95,12 @@ Se decide así:
 
 Detalles de la implementación (`src/ligazon.py`):
 
-- **Nombre normalizado:** mayúsculas, sin tildes (la ñ pasa a N), sin espacios dobles y sin
-  espacios en los extremos. Ejemplo: `"  María  Núñez "` → `"MARIA NUNEZ"`.
+- **Nombre completo:** `nombre_completo(nome, apelidos)` une nombre y apellidos siempre
+  en el mismo orden (`"nome apelidos"`). Es la única función que los une, y la usan tanto el
+  cruce con la lista de inscritos como la ligazón de personas.
+- **Nombre normalizado:** mayúsculas, sin tildes (la ñ pasa a N), con el guion cambiado por
+  un espacio, sin espacios dobles y sin espacios en los extremos.
+  Ejemplo: `"  María-José  Núñez "` → `"MARIA JOSE NUNEZ"`.
 - **Prefijo:** la clave de persona empieza por `D:` si es un dorsal y por `N:` si es un
   nombre (`D:123`, `N:MARIA NUNEZ`), de modo que un dorsal y un nombre nunca producen la
   misma clave.

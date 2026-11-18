@@ -5,13 +5,15 @@ Ejecutar desde la raíz del repo:  python -m pytest
 
 import pytest
 
-from src.ligazon import normalizar_nombre
+from src.ligazon import nombre_completo, normalizar_nombre
 
 
 @pytest.mark.parametrize(
     "entrada, esperado",
     [
         ("  María  Núñez ", "MARIA NUNEZ"),    # tildes, ñ, espacios dobles y extremos
+        ("María-José Pérez-Oca", "MARIA JOSE PEREZ OCA"),  # guiones como espacios
+        ("María José Pérez Oca", "MARIA JOSE PEREZ OCA"),  # igual que el caso anterior
         ("ana lópez", "ANA LOPEZ"),             # minúsculas
         ("JOSÉ  PÉREZ", "JOSE PEREZ"),          # ya en mayúsculas
         ("Iván\tGómez\n", "IVAN GOMEZ"),        # tabuladores y saltos de línea
@@ -20,6 +22,16 @@ from src.ligazon import normalizar_nombre
 )
 def test_normalizar_nombre(entrada, esperado):
     assert normalizar_nombre(entrada) == esperado
+
+
+def test_nombre_completo_une_nome_y_apelidos_en_ese_orden():
+    assert nombre_completo("Ana", "López Pérez") == "Ana López Pérez"
+
+
+def test_guion_o_espacio_dan_la_misma_clave_de_persona():
+    con_guion = clave_persona(nombre_completo("María-José", "Pérez-Oca"), 1, inscrito=False)
+    con_espacio = clave_persona(nombre_completo("María José", "Pérez Oca"), 1, inscrito=False)
+    assert con_guion == con_espacio == "N:MARIA JOSE PEREZ OCA"
 
 
 def test_normalizar_nombre_es_idempotente():
