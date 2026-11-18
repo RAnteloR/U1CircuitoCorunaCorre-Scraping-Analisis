@@ -3,7 +3,7 @@
 Incluye:
 - quitar_identificadores(tabla): elimina columnas con datos personales antes de mostrar.
 - configurar_estilo_graficas(): aplica colores, fuente y tamaño comunes para todo el grupo.
-- guardar_figura(figura, nombre_archivo): guarda la gráfica limpia en la carpeta output/.
+- guardar_figura(figura, nombre_archivo): guarda la gráfica limpia en output/figuras/.
 """
 
 from __future__ import annotations
@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from src.config import DIR_OUTPUT
+
+# Carpeta específica para las gráficas, separada de las entregas finales en output/
+DIR_FIGURAS = DIR_OUTPUT / "figuras"
 
 # Lista de columnas que identifican a una persona y nunca deben salir en pantalla
 COLUMNAS_IDENTIFICADORAS = [
@@ -78,17 +81,17 @@ def configurar_estilo_graficas() -> None:
 def guardar_figura(
     figura: plt.Figure,
     nombre_archivo: str,
-    carpeta_destino: Path = DIR_OUTPUT,
+    carpeta_destino: Path = DIR_FIGURAS,
 ) -> Path:
-    """Guarda una gráfica en formato PNG con buena calidad y sin bordes cortados.
+    """Guarda una gráfica en formato PNG en output/figuras/ sin bordes cortados.
 
-    Si el nombre no termina en .png, se lo añade automáticamente.
+    Si el nombre no termina en .png (en mayúsculas o minúsculas), se lo añade.
     """
-    # Nos aseguramos de que la carpeta de salida exista
+    # Nos aseguramos de que la carpeta output/figuras/ exista
     carpeta_destino.mkdir(parents=True, exist_ok=True)
 
-    # Añadimos la extensión .png si alguien se olvida de ponerla
-    if not nombre_archivo.endswith(".png"):
+    # Usamos .lower() para que "grafica.PNG" no acabe como "grafica.PNG.png"
+    if not nombre_archivo.lower().endswith(".png"):
         nombre_archivo = f"{nombre_archivo}.png"
 
     ruta_completa = carpeta_destino / nombre_archivo
