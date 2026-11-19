@@ -95,3 +95,7 @@ def test_minimo_segun_distancia():
 def test_sin_distancia_usa_12_min():
     assert marcar_tiempo(13 * 60) == "ok"
     assert marcar_tiempo(13 * 60, distancia_m=float("nan")) == "ok"   # Volta a Oza: sin distancia
+
+def test_nan_es_faltante():
+    # pandas convierte los None en NaN al usar .map() sobre una columna
+    assert marcar_tiempo(float("nan")) == "faltante"

@@ -47,11 +47,11 @@ def tiempo_a_segundos(texto):
 
 def marcar_tiempo(segundos, distancia_m=None):
     """Devuelve 'ok', 'faltante' o 'imposible'. No borra nada, solo marca.
-
     Si se pasa la distancia de la carrera, el mínimo es 2:30 min/km por la distancia.
     Si no se sabe (None o NaN), se usa el mínimo general de 12 min.
     """
-    if segundos is None:
+    # pandas convierte los None en NaN al usar .map() sobre una columna
+    if segundos is None or (isinstance(segundos, float) and math.isnan(segundos)):
         return "faltante"
     if distancia_m is None or (isinstance(distancia_m, float) and math.isnan(distancia_m)):
         minimo = TIEMPO_MIN_S
